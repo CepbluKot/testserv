@@ -1,7 +1,8 @@
+import subprocess
+import threading
 import uvicorn
 from fastapi import FastAPI
 from uuid import uuid4
-import time
 from tasks import do_smth
 from config import redis_async
 from state_model import JobData, LaunchTaskData
@@ -28,4 +29,9 @@ async def get_task_data(task_id: str) -> JobData:
 
 
 if __name__ == '__main__':
+    dramatiq_thr  = threading.Thread(target=subprocess.run, kwargs={'args':'dramatiq tasks',
+                                                'shell': True,
+                                                'executable': '/bin/bash'})
+    dramatiq_thr.daemon = True
+    dramatiq_thr.start()
     uvicorn.run(app)    
